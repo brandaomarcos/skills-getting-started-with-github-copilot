@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // Clear loading message
       activitiesList.innerHTML = "";
 
+      // Clear existing options in the dropdown
+      activitySelect.innerHTML = "";
+
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
         const activityCard = document.createElement("div");
@@ -26,11 +29,21 @@ document.addEventListener("DOMContentLoaded", () => {
           activitiesList.appendChild(activityCard);
           return;
         }
+
+        // Create participants list
+        const participantsList = details.participants && details.participants.length > 0
+          ? `<ul>${details.participants.map(participant => `<li>${participant}</li>`).join("")}</ul>`
+          : "<p>No participants yet.</p>";
+
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <div>
+            <strong>Participants:</strong>
+            ${participantsList}
+          </div>
         `;
 
         activitiesList.appendChild(activityCard);
@@ -69,8 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.className = "success";
         signupForm.reset();
 
-        // Refresh activities list to update availability
-        await fetchActivities();
+        
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
         messageDiv.className = "error";
@@ -88,6 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
       messageDiv.classList.remove("hidden");
       console.error("Error signing up:", error);
     }
+    // Refresh activities list to update availability
+    await fetchActivities();
   });
 
   // Initialize app
