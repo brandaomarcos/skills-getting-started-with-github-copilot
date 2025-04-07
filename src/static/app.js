@@ -20,6 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        if (spotsLeft <= 0) {
+          activityCard.classList.add("full");
+          activityCard.innerHTML = `<h4>${name} (FULL)</h4>`;
+          activitiesList.appendChild(activityCard);
+          return;
+        }
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
@@ -62,6 +68,9 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
         signupForm.reset();
+
+        // Refresh activities list to update availability
+        await fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
         messageDiv.className = "error";
