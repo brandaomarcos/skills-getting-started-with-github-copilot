@@ -123,9 +123,14 @@ def signup_for_activity(activity_name: str, email: str):
     if not activity:
         raise HTTPException(status_code=404, detail="Activity not found")
 
+    # check to ensure that the activity has not already reached max_participants
+    if len(activity.get("participants", [])) >= activity["max_participants"]:
+        raise HTTPException(status_code=400, detail="Activity is full")
+    
     # Validate student is not already signed up
     if email in activity.get("participants", []):
         raise HTTPException(status_code=400, detail="Student already signed up")
+
 
     # Add the student to the participants list
     activities_collection.update_one(
