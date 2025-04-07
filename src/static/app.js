@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
-  const darkModeToggle = document.getElementById("dark-mode-toggle");
+const darkModeToggle = document.getElementById("dark-mode-toggle");
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Clear loading message
       activitiesList.innerHTML = "";
 
-      // Clear existing options in the dropdown
+     // Clear existing options in the dropdown
       activitySelect.innerHTML = "";
 
       // Populate activities list
@@ -33,7 +33,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Create participants list
         const participantsList = details.participants && details.participants.length > 0
-          ? `<ul>${details.participants.map(participant => `<li>${participant}</li>`).join("")}</ul>`
+          ? `<div class="participants">
+               <strong>Participants:</strong>
+               <ul>${details.participants.map(participant => `<li>${participant}</li>`).join("")}</ul>
+             </div>`
           : "<p>No participants yet.</p>";
 
         activityCard.innerHTML = `
@@ -41,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-          <div>
+<div>
             <strong>Participants:</strong>
             ${participantsList}
           </div>
@@ -101,11 +104,11 @@ document.addEventListener("DOMContentLoaded", () => {
       messageDiv.classList.remove("hidden");
       console.error("Error signing up:", error);
     }
-    // Refresh activities list to update availability
+      // Refresh activities list to update availability
     await fetchActivities();
   });
 
-  // Toggle dark mode
+// Toggle dark mode
   darkModeToggle.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
     document.querySelector("header").classList.toggle("dark-mode");
@@ -121,6 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Initialize app
+// Initialize app
   fetchActivities();
 });
